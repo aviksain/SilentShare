@@ -14,7 +14,7 @@ const dbConnect = async (): Promise<void> => {
   }
 
   try {
-    const response = await mongoose.connect(process.env.MONGODB_URL || "");
+    const response = await mongoose.connect(`${process.env.MONGODB_URL}/${process.env.DB_NAME}` || "");
     connection.isConnected = response.connections[0].readyState;
 
     console.log('DATABASE connected successfully');
@@ -24,3 +24,6 @@ const dbConnect = async (): Promise<void> => {
     process.exit(1);
   }
 };
+
+
+export default dbConnect;
