@@ -1,46 +1,38 @@
 import { NextAuthOptions } from "next-auth";
-import dbConnect from "@/db";
-import bcrypt from "bcryptjs";
-import UserModel from "@/model/user.model";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import dbConnect from "@/db";
+import UserModel from "@/model/user.model";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      id: "Credentials",
+      id: "credentials",
       name: "Credentials",
       credentials: {
-        email: { label: "email", type: "text" },
+        email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any): Promise<any> {
         await dbConnect();
-
         try {
           const user = await UserModel.findOne({
-            $or: [
-              { email: credentials.identifier },
-              { username: credentials.identifier },
-            ],
+            email: credentials.email,
           });
-
           if (!user) {
-            throw new Error("User not found with this email");
+            throw new Error("No user found with this email");
           }
-
           if (!user.isVerified) {
-            throw new Error("Please verify your account");
+            throw new Error("Please verify your account before logging in");
           }
-
-          const password = await bcrypt.compare(
+          const isPasswordCorrect = await bcrypt.compare(
             credentials.password,
             user.password
           );
-
-          if (password) {
+          if (isPasswordCorrect) {
             return user;
           } else {
-            throw new Error("incorrect password");
+            throw new Error("Incorrect password");
           }
         } catch (err: any) {
           throw new Error(err);
@@ -49,17 +41,16 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({token, user}) {
-      if(user) {
-        token._id = user._id?.toString(),
+    async jwt({ token, user }) {
+      if (user) {
+        token._id = user._id?.toString(); // Convert ObjectId to string
         token.isVerified = user.isVerified;
         token.isAcceptingMessages = user.isAcceptingMessages;
         token.username = user.username;
       }
-
-      return token
+      return token;
     },
-    async session({session, token}) {
+    async session({ session, token }) {
       if (token) {
         session.user._id = token._id;
         session.user.isVerified = token.isVerified;
@@ -67,13 +58,13 @@ export const authOptions: NextAuthOptions = {
         session.user.username = token.username;
       }
       return session;
-    }
-  },
-  pages: {
-    signIn: '/signin',
+    },
   },
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
-  secret: process.env.NEXT_AUTH_SECRET
+  secret: process.env.NEXT_AUTH_SECRET,
+  pages: {
+    signIn: "/signin",
+  },
 };

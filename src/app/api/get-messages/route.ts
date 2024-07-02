@@ -37,7 +37,7 @@ export async function GET(request: Request) {
     const messages = await UserModel.aggregate([
       {
         $match: {
-          $id: new mongoose.Types.ObjectId(user._id),
+          _id: new mongoose.Types.ObjectId(user._id),
         },
       },
       {
@@ -63,7 +63,7 @@ export async function GET(request: Request) {
 
     return Response.json(
       { 
-        messages: messages[0] 
+        messages: messages[0]?.messages
       },
       {
         status: 200,

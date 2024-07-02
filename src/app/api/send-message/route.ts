@@ -39,7 +39,6 @@ export async function POST(request: Request) {
       { status: 201 }
     );
 
-
   } catch (error) {
     console.error('Error adding message:', error);
     return Response.json(

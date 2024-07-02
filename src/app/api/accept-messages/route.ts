@@ -3,7 +3,6 @@ import dbConnect from "@/db";
 import UserModel from "@/model/user.model";
 import { User } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
-import ApiResponse from "@/lib/ApiResponse";
 
 export async function POST(request: Request) {
   await dbConnect();
@@ -14,13 +13,15 @@ export async function POST(request: Request) {
   if (!session || !session.user) {
     return Response.json({
       success: false,
-      message: new ApiResponse(400, {}, "Unauthorized request"),
+      message: "Unauthorized request",
     });
   }
 
   const userId = user._id;
   const { acceptingMessages } = await request.json();
 
+  console.log(acceptingMessages)
+  
   try {
     const updatedUser = await UserModel.findByIdAndUpdate(
       userId,
@@ -32,11 +33,7 @@ export async function POST(request: Request) {
       return Response.json(
         {
           success: false,
-          message: new ApiResponse(
-            404,
-            {},
-            "Unable to find user to update message acceptance status"
-          ),
+          message:"Unable to find user to update message acceptance status"
         },
         { status: 404 }
       );
@@ -45,11 +42,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         success: true,
-        message: new ApiResponse(
-          404,
-          {},
-          "Message acceptance status updated successfully"
-        ),
+        message: "Message acceptance status updated successfully",
         updatedUser,
       },
       { status: 200 }
