@@ -19,7 +19,7 @@ import * as z from "zod";
 import { verifySchema } from "@/Schema/verifySchema";
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
 
-function page() {
+function Page() {
   const router = useRouter();
   const params = useParams<{ username: string }>();
   const { toast } = useToast();
@@ -99,4 +99,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

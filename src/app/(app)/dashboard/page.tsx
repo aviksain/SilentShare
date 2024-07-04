@@ -17,7 +17,7 @@ import { Loader2, RefreshCcw } from "lucide-react";
 import { MsgCard } from "@/components/MsgCard";
 import { Navbar } from "@/components/Navbar";
 
-function page() {
+function Page() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitching, setIsSwitching] = useState(false);
@@ -197,4 +197,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

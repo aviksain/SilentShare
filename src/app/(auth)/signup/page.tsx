@@ -22,7 +22,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-function page() {
+function Page() {
   const [username, setUsername] = useState("");
   const [usernameMessage, setUsernameMessage] = useState("");
   const [usernameLoder, setUsernameLoder] = useState(false);
@@ -197,4 +197,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

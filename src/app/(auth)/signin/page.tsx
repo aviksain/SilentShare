@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { signInSchema } from "@/Schema/signInSchema";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof signInSchema>>({
@@ -109,4 +109,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
