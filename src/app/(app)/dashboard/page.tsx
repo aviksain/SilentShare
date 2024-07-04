@@ -22,6 +22,8 @@ function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitching, setIsSwitching] = useState(false);
 
+  const [profileUrl, setProfileUrl] = useState('');
+
   const { toast } = useToast();
 
   const handelDeleteMessage = (messageId: string) => {
@@ -122,8 +124,12 @@ function Page() {
 
   const username = session?.user.username as User;
 
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
-  const profileUrl = `${baseUrl}/u/${username}`;
+    useEffect(() => {
+      if (typeof window !== 'undefined') {
+        const baseUrl = `${window.location.protocol}//${window.location.host}`;
+        setProfileUrl(`${baseUrl}/u/${username}`);
+      }
+    }, [username]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(profileUrl);
